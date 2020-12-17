@@ -38,7 +38,7 @@ function init() {
   gui.add(controls, 'phiStart', 0, 2 * Math.PI).onChange(controls.redraw);
   gui.add(controls, 'phiLength', 0, 2 * Math.PI).onChange(controls.redraw);
 
-   // add a material section, so we can switch between materials
+   // menambahkan opsi material agar bisa dipilih dalam control
    gui.add(controls, 'appliedMaterial', {
     meshNormal: applyMeshNormalMaterial, 
     meshStandard: applyMeshStandardMaterial
@@ -48,7 +48,7 @@ function init() {
   gui.add(controls, 'groundPlaneVisible').onChange(function(e) {groundPlane.material.visible = e})
   gui.add(controls, 'redraw');
 
-
+  //generate 30 points
   function generatePoints(segments, phiStart, phiLength) {
 
     if (spGroup) scene.remove(spGroup)
@@ -58,7 +58,7 @@ function init() {
     var count = 30;
     for (var i = 0; i < count; i++) {
       points.push(new THREE.Vector2((Math.sin(i * 0.2) + Math.cos(i * 0.3)) * height + 12, (i - count) +
-        count / 2));
+      count / 2));
     }
 
     spGroup = new THREE.Object3D();
@@ -74,10 +74,9 @@ function init() {
 
       spGroup.add(spMesh);
     });
-    // add the points as a group to the scene
+
     scene.add(spGroup);
 
-    // use the same points to create a LatheGeometry
     var latheGeometry = new THREE.LatheGeometry(points, segments, phiStart, phiLength);
     return latheGeometry;
   }
