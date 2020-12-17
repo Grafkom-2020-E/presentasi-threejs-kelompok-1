@@ -1,22 +1,21 @@
 function init() {
 
-  // use the defaults
   var stats = initStats();
   var renderer = initRenderer();
   var camera = initCamera();
 
-  // create a scene, that will hold all our elements such as objects, cameras and lights.
-  // and add some simple default lights
+  //scene untuk menampung semua elemet (object, camera, lighting)
+
   var scene = new THREE.Scene();
   initDefaultLighting(scene);
   var groundPlane = addLargeGroundPlane(scene)
   groundPlane.position.y = -30;
 
 
-  // the points group
+  // points group
   var spGroup;
 
-  // setup the control gui
+  // setup untuk controls
   var controls = new function () {
     this.appliedMaterial = applyMeshNormalMaterial
     this.castShadow = true;
@@ -24,7 +23,7 @@ function init() {
 
     this.segments = 12;
     this.phiStart = 0;
-    this.phiLength = 2 * Math.PI;
+    this.phiLength = Math.PI;
 
     // redraw function, updates the control UI and recreates the geometry.
     this.redraw = function () {
