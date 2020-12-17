@@ -50,6 +50,49 @@ function init() {
     return result.set( x, y, z );
   };
 
+  mobius = function ( u, t, optionalTarget ) {
+
+		var result = optionalTarget || new THREE.Vector3();
+
+		u = u - 0.5;
+		var v = 2 * Math.PI * t;
+
+		var x, y, z;
+
+		var a = 10;
+
+		x = Math.cos( v ) * ( a + u * Math.cos( v / 2 ) );
+		y = Math.sin( v ) * ( a + u * Math.cos( v / 2 ) );
+		z = u * Math.sin( v / 2 );
+
+		return result.set( x, y, z );
+
+  };
+  
+  mobius3d = function ( u, t, optionalTarget ) {
+
+		var result = optionalTarget || new THREE.Vector3();
+
+		// volumetric mobius strip
+
+		u *= Math.PI;
+		t *= 2 * Math.PI;
+
+		u = u * 2;
+		var phi = u / 2;
+		var major = 10 * 2.25, a = 10 * 0.125, b = 10 * 0.65;
+
+		var x, y, z;
+
+		x = a * Math.cos( t ) * Math.cos( phi ) - b * Math.sin( t ) * Math.sin( phi );
+		z = a * Math.cos( t ) * Math.sin( phi ) + b * Math.sin( t ) * Math.cos( phi );
+		y = ( major + x ) * Math.sin( u );
+		x = ( major + x ) * Math.cos( u );
+
+		return result.set( x, y, z );
+
+	};
+
   // setup the control gui
   var controls = new function () {
     this.appliedMaterial = applyMeshNormalMaterial
@@ -72,13 +115,23 @@ function init() {
             var geom = new THREE.ParametricGeometry(klein, controls.slices, controls.stacks);
             geom.center();
             return geom;
+            
+          case "mobius":
+            var geom = new THREE.ParametricGeometry(mobius, controls.slices, controls.stacks);
+            geom.center();
+            return geom;
+            
+          case "mobius3d":
+            var geom = new THREE.ParametricGeometry(mobius3d, controls.slices, controls.stacks);
+            geom.center();
+            return geom;
 
         }
       });
     }
   };
   var gui = new dat.GUI();
-  gui.add(controls, 'renderFunction', ["radialWave", "klein"]).onChange(controls.redraw);
+  gui.add(controls, 'renderFunction', ["radialWave", "klein", "mobius", "mobius3d"]).onChange(controls.redraw);
   gui.add(controls, 'appliedMaterial', {
     meshNormal: applyMeshNormalMaterial, 
     meshStandard: applyMeshStandardMaterial
